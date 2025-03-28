@@ -1,14 +1,12 @@
-# Playwright Python Blueprint
+# Pathways Web Test Automation
 
-[![CI/CD Pull Request](https://github.com/nhs-england-tools/repository-template/actions/workflows/cicd-1-pull-request.yaml/badge.svg)](https://github.com/nhs-england-tools/playwright-python-blueprint/actions/workflows/cicd-1-pull-request.yaml)
-
-This project is designed to provide a blueprint to allow for development teams to start quickly developing UI tests using [Playwright Python](https://playwright.dev/python/), providing the base framework and utilities to allow for initial focus on writing tests, rather than configuration of the framework itself. Playwright is the current mainstream UI testing tool for NHS England, as outlined on the [NHS England Tech Radar](https://radar.engineering.england.nhs.uk/).
+This project is forked from the Playwright blueprint, which was created to allow for development teams to start quickly developing UI tests using [Playwright Python](https://playwright.dev/python/), providing the base framework and utilities to allow for initial focus on writing tests, rather than configuration of the framework itself. Playwright is the current mainstream UI testing tool for NHS England, as outlined on the [NHS England Tech Radar](https://radar.engineering.england.nhs.uk/).
 
 > NOTE: This project is currently under initial development so isn't finalised, but should work if you want to experiment with Playwright Python.
 
 ## Table of Contents
 
-- [Playwright Python Blueprint](#playwright-python-blueprint)
+- [Pathways Web Test Automation](#pathways-web-test-automation)
   - [Table of Contents](#table-of-contents)
   - [Setup](#setup)
     - [Prerequisites](#prerequisites)
@@ -16,7 +14,6 @@ This project is designed to provide a blueprint to allow for development teams t
   - [Getting Started](#getting-started)
   - [Utilities](#utilities)
   - [Contributing](#contributing)
-  - [Contacts](#contacts)
   - [Licence](#licence)
 
 ## Setup
@@ -24,7 +21,7 @@ This project is designed to provide a blueprint to allow for development teams t
 You can clone this whole repository using the code below:
 
 ```shell
-git clone https://github.com/nhs-england-tools/playwright-python-blueprint.git
+git clone https://github.com/NHSDigital/pathwaysweb-playwright.git
 ```
 
 ### Prerequisites
@@ -60,16 +57,7 @@ Alternatively if you are using Visual Studio Code as your IDE, we have pre-confi
 
 ## Getting Started
 
-> NOTE: This section is currently under development and requires further work, so links to pages within this repository may not be very useful at this stage.
-
-Once you've confirmed your installation is working, please take a look at the following guides on getting started with Playwright Python.
-
-1. [Understanding Playwright Python](./docs/getting-started/1_Understanding_Playwright_Python.md)
-2. [Blueprint File Breakdown](./docs/getting-started/2_Blueprint_File_Breakdown.md)
-
-We've also created a [Quick Reference Guide](./docs/getting-started/Quick_Reference_Guide.md) for common commands and actions you may regularly perform using this blueprint.
-
-For additional reading and guidance on writing tests, we also recommend reviewing the [Playwright Python documentation](https://playwright.dev/python/docs/writing-tests).
+> NOTE: This section is currently under development.
 
 ## Utilities
 
@@ -85,12 +73,6 @@ This blueprint also provides the following utility classes, that can be used to 
 ## Contributing
 
 Further guidance on contributing to this project can be found in our [contribution](./CONTRIBUTING.md) page.
-
-## Contacts
-
-If you have any ideas or require support for this project, please [raise an issue via this repository](https://github.com/nhs-england-tools/playwright-python-blueprint/issues/new/choose) using the appropriate template.
-
-If you have any general queries regarding this blueprint, please contact [dave.harding1@nhs.net](mailto:dave.harding1@nhs.net).
 
 ## Licence
 
