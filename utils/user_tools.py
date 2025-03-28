@@ -10,6 +10,8 @@ from pages.login_page import LoginPage
 logger = logging.getLogger(__name__)
 USERS_FILE = Path(__file__).parent.parent / "users.json"
 
+ENV_FILE = Path(__file__).parent.parent / "local.env"
+
 
 class UserTools:
     """
@@ -37,8 +39,8 @@ class UserTools:
         return user_data[user]
 
     def log_in_as_user(page: Page, user: str, accept_cookies: bool = True) -> dict:
-        # Load dotenv to enable retrieval of a password from .env file
-        load_dotenv()
+        # Load dotenv to enable retrieval of a password from local.env file
+        load_dotenv(ENV_FILE)
         user_details = UserTools.retrieve_user(user)
         LoginPage(page).login(
             user_details["email"], os.getenv("PWW_PASS"), accept_cookies
