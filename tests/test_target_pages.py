@@ -50,7 +50,7 @@ def test_call_handler_dos(page: Page) -> None:
 
 def test_dx_disposition_il(page: Page) -> None:
     """
-    This test early exits from a Dx0116 Emergency Ambulance response triage
+    This test early exits from a Dx0116 emergency ambulance response triage
 
     Manual regression reference: Example 2 "DxDispositionIL" in PCORE-3951
     """
@@ -116,7 +116,7 @@ def test_cx_care_advice_hc(page: Page) -> None:
 
 def test_cx_care_advice_il(page: Page) -> None:
     """
-    This test completes a Dx0116 Emergency Ambulance response triage with inline care advice
+    This test completes a Dx0116 emergency ambulance response triage with inline care advice
 
     Manual regression reference: Example 4 "CxCareAdviceIL" in PCORE-3951
     """
@@ -154,9 +154,9 @@ def test_cx_care_advice_il(page: Page) -> None:
 
 def test_pa1(page: Page) -> None:
     """
-    This test completes a Dx0116 Emergency Ambulance response triage with inline care advice
+    This test completes a Dx010 emergency ambulance response triage with inline care advice
 
-    Manual regression reference: Example 4 "CxCareAdviceIL" in PCORE-3951
+    Manual regression reference: Example 5 "PA1" in PCORE-3951
     """
     triage_page = TriagePage(page)
     patient_details = PatientTools.retrieve_patient("Female Third")
@@ -179,4 +179,39 @@ def test_pa1(page: Page) -> None:
     )
     expect(page.locator("#main-content")).to_contain_text(
         "EITHER: check the call report to confirm that a disposition has been accepted, then continue."
+    )
+
+
+def test_clinician_dos(page: Page) -> None:
+    """
+    This test completes a Dx0116 emergency ambulance response triage with inline care advice
+
+    Manual regression reference: Example 6 "Clinician DoS" in PCORE-3951
+    """
+    triage_page = TriagePage(page)
+    patient_details = PatientTools.retrieve_patient("Male Third")
+    triage_page.populate_patient_details(patient_details)
+
+    triage_page.select_release("46.2.0")
+    page.get_by_role("checkbox", name="COVID Level 1").check()
+    page.get_by_role("checkbox", name="COVID Level 2").check()
+    page.get_by_role("checkbox", name="MERS virus").check()
+
+    triage_page.launch_as(UserSkillset.OPTION_111_CLINICIAN.value)
+
+    TargetPagesPage(page, patient_details["party"]).clinician_dos_triage()
+    expect(page.locator("#main-content")).to_contain_text(
+        "Consultation Report for Simon Smith"
+    )
+    expect(page.locator("#main-content")).to_contain_text(
+        "SG1140 - Predetermined Management Plan"
+    )
+    expect(page.locator("#main-content")).to_contain_text(
+        "SD4170 - PC syringe driver management capability - palliative care services"
+    )
+    expect(page.locator("#main-content")).to_contain_text(
+        "Dx117 - The individual needs to speak to a local service within 1 hour for palliative care."
+    )
+    expect(page.locator("#main-content")).to_contain_text(
+        "NO INSTRUCTIONS GIVEN AS CALL RELATES TO AN INDIVIDUAL WHO HAS DIED."
     )

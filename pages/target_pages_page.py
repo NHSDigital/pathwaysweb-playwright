@@ -105,7 +105,7 @@ class TargetPagesPage:
         self.page.get_by_role("checkbox", name="Use a dry dressing or a clean").check()
         self.page.get_by_role("button", name="Next").click()
         self.page.get_by_role("button", name="no", exact=True).click()
-        expect(self.page.locator("#main-content")).to_contain_text(
+        expect(self.main_content).to_contain_text(
             "PA25.4600 Closing instructions"
         )
         self.page.get_by_text("If you can, ask for someone").click()
@@ -128,3 +128,29 @@ class TargetPagesPage:
         self.page.get_by_role("button", name="yes").click()
         self.page.get_by_role("checkbox", name="EITHER: check the call report").check()
         self.page.get_by_role("button", name=self.save_and_close).click()
+
+    def clinician_dos_triage(self) -> None:
+        self.page.get_by_role("button", name="a community service").click()
+        self.page.get_by_role("button", name="palliative care team").click()
+        self.page.get_by_role("button", name="ongoing management").click()
+        self.page.get_by_role("button", name="yes").click()
+        expect(self.main_content).to_contain_text(
+            "PA99.700 Speak to a local service within 1 hour for palliative care"
+        )
+        self.page.get_by_role(
+            "checkbox", name="I will arrange for a clinician to speak to the individual"
+        ).check()
+        self.page.get_by_role("button", name="Next").click()
+        expect(self.main_content).to_contain_text(
+            "PA99.700 Speak to a local service within 1 hour for palliative care"
+        )
+        self.page.locator("#btnAccept0").click()
+        expect(self.page.locator("h1")).to_contain_text(
+            "Interim care advice for: Predetermined management Plan"
+        )
+        expect(self.main_content).to_contain_text("Worsening")
+        self.page.get_by_role(
+            "checkbox",
+            name="NO INSTRUCTIONS GIVEN AS CALL RELATES TO AN INDIVIDUAL WHO HAS DIED.",
+        ).check()
+        self.page.get_by_role("button", name="Save and Close").click()
