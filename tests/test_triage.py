@@ -17,7 +17,7 @@ def admin_login(page: Page) -> None:
 
 # @pytest.fixture()
 # def patient_details(page: Page) -> None:
-#     return PatientTools.retrieve_patient(page, "Joe Bloggs")  # dont need a fiture if we add it in the test. Removed arg - patient_details: dict
+#     return PatientTools.retrieve_patient(page, "Joe Bloggs")  # dont need a fixture if we add it in the test. Removed arg - patient_details: dict
 
 
 def test_repeat_caller(page: Page) -> None:

@@ -5,6 +5,7 @@ from enum import Enum
 class UserSkillset(Enum):
     OPTION_111_CALL_HANDLER = "111 Call Handler"
     OPTION_999_CALL_HANDLER = "999 Call Handler"
+    OPTION_111_CLINICIAN = "111 Clinician"
 
 
 class TriagePage:

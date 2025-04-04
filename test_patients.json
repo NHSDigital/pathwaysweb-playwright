@@ -1,11 +1,27 @@
 {
     "_comment": "This file can be used to store test patient data for triages, and then pulled through using the utils.patient_tools PatientTools utility. Based on UserTools functionality",
-    "Joe Bloggs": {
+    "Male First": {
         "first_name": "Joe",
         "last_name": "Bloggs",
         "age": "Adult (16 years and over)",
         "postcode": "DH1 2HP",
         "gender": "Male",
         "party": "1st Party"
+    },
+    "Male Third": {
+        "first_name": "Simon",
+        "last_name": "Smith",
+        "age": "Adult (16 years and over)",
+        "postcode": "DH1 2HP",
+        "gender": "Male",
+        "party": "3rd Party"
+    },
+    "Female Third": {
+        "first_name": "Joanne",
+        "last_name": "Smith",
+        "age": "Adult (16 years and over)",
+        "postcode": "DH1 2HP",
+        "gender": "Female",
+        "party": "3rd Party"
     }
 }
