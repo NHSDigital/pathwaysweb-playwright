@@ -23,6 +23,12 @@ class TargetPagesPage:
 
         self.emergency_ambulance = "An emergency ambulance is being arranged"
 
+    def basic_triage(self) -> None:
+        self.page.get_by_role("button", name="a report of results or tests").click()
+        self.page.get_by_role("button", name="Accept").click()
+        self.page.get_by_text("We will pass the details onto").click()
+        self.page.get_by_role("button", name=self.save_and_close).click()
+
     def call_handler_dos_triage(self) -> None:
         self.page.get_by_role("button", name="a report of results or tests").click()
         expect(self.main_content).to_contain_text(
@@ -153,4 +159,23 @@ class TargetPagesPage:
             "checkbox",
             name="NO INSTRUCTIONS GIVEN AS CALL RELATES TO AN INDIVIDUAL WHO HAS DIED.",
         ).check()
-        self.page.get_by_role("button", name="Save and Close").click()
+        self.page.get_by_role("button", name=self.save_and_close).click()
+
+    def injury_module_triage(self) -> None:
+        self.page.get_by_role("button", name="an injury, illness or other").click()
+        self.page.get_by_role("button", name="no", exact=True).click()
+        self.page.get_by_role("button", name="injury within 7 days (specify)").click()
+        self.page.get_by_role("textbox", name="Please specify").fill("blisters")
+        self.page.get_by_role("button", name="Ok").click()
+        self.page.get_by_role("button", name="yes - a scratch, graze, minor").click()
+        expect(self.main_content).to_contain_text("PA124.12700 Pathways injury module, call transfer advice")
+        self.page.get_by_text("THIS INJURY MAY BE SUITABLE").click()
+        self.page.get_by_role("button", name="Next").click()
+        expect(self.main_content).to_contain_text("DO YOU WANT TO CONTINUE TO TRANSFER? PA124.12500")
+        self.page.get_by_role("button", name="yes - transfer the call").click()
+        expect(self.main_content).to_contain_text("PA124.12600 Speak to a Service Advisor Immediately for Injury Assessment")
+        self.page.get_by_text("If the call gets cut off,").click()
+        self.page.get_by_role("button", name=self.save_and_close).click()
+        expect(self.main_content).to_contain_text("Consultation Report for Joe Bloggs")
+        expect(self.main_content).to_contain_text("THIS INJURY MAY BE SUITABLE FOR TRANSFER TO A SERVICE ADVISOR UNLESS A REASON NOT TO HAS BEEN IDENTIFIED.")
+        
