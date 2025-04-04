@@ -111,9 +111,7 @@ class TargetPagesPage:
         self.page.get_by_role("checkbox", name="Use a dry dressing or a clean").check()
         self.page.get_by_role("button", name="Next").click()
         self.page.get_by_role("button", name="no", exact=True).click()
-        expect(self.main_content).to_contain_text(
-            "PA25.4600 Closing instructions"
-        )
+        expect(self.main_content).to_contain_text("PA25.4600 Closing instructions")
         self.page.get_by_text("If you can, ask for someone").click()
         self.page.get_by_role("button", name=self.save_and_close).click()
 
@@ -168,14 +166,21 @@ class TargetPagesPage:
         self.page.get_by_role("textbox", name="Please specify").fill("blisters")
         self.page.get_by_role("button", name="Ok").click()
         self.page.get_by_role("button", name="yes - a scratch, graze, minor").click()
-        expect(self.main_content).to_contain_text("PA124.12700 Pathways injury module, call transfer advice")
+        expect(self.main_content).to_contain_text(
+            "PA124.12700 Pathways injury module, call transfer advice"
+        )
         self.page.get_by_text("THIS INJURY MAY BE SUITABLE").click()
         self.page.get_by_role("button", name="Next").click()
-        expect(self.main_content).to_contain_text("DO YOU WANT TO CONTINUE TO TRANSFER? PA124.12500")
+        expect(self.main_content).to_contain_text(
+            "DO YOU WANT TO CONTINUE TO TRANSFER? PA124.12500"
+        )
         self.page.get_by_role("button", name="yes - transfer the call").click()
-        expect(self.main_content).to_contain_text("PA124.12600 Speak to a Service Advisor Immediately for Injury Assessment")
+        expect(self.main_content).to_contain_text(
+            "PA124.12600 Speak to a Service Advisor Immediately for Injury Assessment"
+        )
         self.page.get_by_text("If the call gets cut off,").click()
         self.page.get_by_role("button", name=self.save_and_close).click()
         expect(self.main_content).to_contain_text("Consultation Report for Joe Bloggs")
-        expect(self.main_content).to_contain_text("THIS INJURY MAY BE SUITABLE FOR TRANSFER TO A SERVICE ADVISOR UNLESS A REASON NOT TO HAS BEEN IDENTIFIED.")
-        
+        expect(self.main_content).to_contain_text(
+            "THIS INJURY MAY BE SUITABLE FOR TRANSFER TO A SERVICE ADVISOR UNLESS A REASON NOT TO HAS BEEN IDENTIFIED."
+        )

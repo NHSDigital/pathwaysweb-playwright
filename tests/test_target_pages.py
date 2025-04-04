@@ -217,6 +217,7 @@ def test_clinician_dos(page: Page) -> None:
         "NO INSTRUCTIONS GIVEN AS CALL RELATES TO AN INDIVIDUAL WHO HAS DIED."
     )
 
+
 def test_paccs_exploratory(page: Page) -> None:
     """
     This test does some exploratory checks on PaCCS
@@ -233,20 +234,23 @@ def test_paccs_exploratory(page: Page) -> None:
     page.get_by_role("textbox", name="Symptom Search").fill("leg")
     page.get_by_role("link", name="Leg Injury, Blunt").click()
     page.get_by_role("checkbox", name="Multiple Injuries Considered").check()
-    page.get_by_role("checkbox", name="New or Worsening Pain and/or Swelling Suspected").check()
+    page.get_by_role(
+        "checkbox", name="New or Worsening Pain and/or Swelling Suspected"
+    ).check()
     page.get_by_role("button", name="Home Care", exact=True).click()
     page.get_by_role("button", name="Leg Injury, Blunt/New or").click()
     expect(page.locator("h1")).to_contain_text("Pathways Clinical Consultation Support")
     page.get_by_role("button", name="Return No Change").click()
-    expect(page.locator("h1")).to_contain_text("Home care advice for: PaCCS Home Management Suite")
+    expect(page.locator("h1")).to_contain_text(
+        "Home care advice for: PaCCS Home Management Suite"
+    )
     page.get_by_title("47317975").click()
     page.get_by_role("button", name="Save and Close").click()
 
 
-
 def test_picking_up_non_paccs_triage_from_call_queue_as_paccs_user(page: Page) -> None:
     """
-    This test adds a basic triage to call queue, picked up as a PaCCS user to complete 
+    This test adds a basic triage to call queue, picked up as a PaCCS user to complete
     Manual regression reference: PaCCS example (part2) on Target Pages tab in spreadsheet in PCORE-3951
     """
     triage_page = TriagePage(page)
@@ -259,7 +263,9 @@ def test_picking_up_non_paccs_triage_from_call_queue_as_paccs_user(page: Page) -
 
     TargetPagesPage(page, patient_details["party"]).basic_triage()
 
-    items = ConsultationReportPage(page).get_consultation_report_items() # case ID grabbed in here
+    items = ConsultationReportPage(
+        page
+    ).get_consultation_report_items()  # case ID grabbed in here
 
     # add to call queue
     page.get_by_role("button", name="Add to Call Queue").click()
@@ -271,7 +277,9 @@ def test_picking_up_non_paccs_triage_from_call_queue_as_paccs_user(page: Page) -
     page.get_by_role("button", name="Call Queue").click()
 
     # find and continue triage
-    page.locator(f"[data-id='{items["CASE ID"]}']").click() # look for custom attribute to click and continue triage for case id
+    page.locator(
+        f"[data-id='{items["CASE ID"]}']"
+    ).click()  # look for custom attribute to click and continue triage for case id
     page.get_by_role("button", name="Yes").click()
     expect(page.locator("#confirmationModal")).to_contain_text("Case Summary")
     expect(page.locator("#confirmationModal")).to_contain_text(f"{items["CASE ID"]}")
@@ -280,7 +288,10 @@ def test_picking_up_non_paccs_triage_from_call_queue_as_paccs_user(page: Page) -
     # triage continued
     page.get_by_role("textbox", name="Symptom Search").fill("results")
     page.get_by_role("link", name="Report of results or tests").click()
-    page.get_by_role("checkbox", name="Report of results or tests - case able to be completed Suspected").check()
+    page.get_by_role(
+        "checkbox",
+        name="Report of results or tests - case able to be completed Suspected",
+    ).check()
     page.get_by_role("button", name="Home Care", exact=True).click()
     page.get_by_title("47317975").click()
     page.get_by_role("button", name="Save and Close").click()
@@ -308,9 +319,11 @@ def test_picking_up_injury_module_triage_as_injury_module_user(page: Page) -> No
 
     TargetPagesPage(page, patient_details["party"]).injury_module_triage()
 
-    items = ConsultationReportPage(page).get_consultation_report_items() # case ID grabbed in here
+    items = ConsultationReportPage(
+        page
+    ).get_consultation_report_items()  # case ID grabbed in here
 
-    #add to call queue
+    # add to call queue
     page.get_by_role("button", name="Add to Call Queue").click()
     page.get_by_role("button", name="Yes").click()
     page.locator("[id='btnClose']").click()
@@ -327,13 +340,17 @@ def test_picking_up_injury_module_triage_as_injury_module_user(page: Page) -> No
 
     # triage continued
     expect(page.locator("h1")).to_contain_text("Pathways Injury Module")
-    page.locator("#PartialStandard div").filter(has_text="bite or sting No 111 Online answer text This means a bite by a human, animal or").nth(2).click()
+    page.locator("#PartialStandard div").filter(
+        has_text="bite or sting No 111 Online answer text This means a bite by a human, animal or"
+    ).nth(2).click()
     page.get_by_role("button", name="yes").click()
     page.get_by_role("button", name="sunburn").click()
     page.get_by_role("button", name="no", exact=True).click()
     page.get_by_role("button", name="no", exact=True).click()
     page.get_by_role("button", name="passing less urine than normal").click()
-    expect(page.locator("#main-content")).to_contain_text("PW987.1800 Refer to a Treatment Centre within 4 hours")
+    expect(page.locator("#main-content")).to_contain_text(
+        "PW987.1800 Refer to a Treatment Centre within 4 hours"
+    )
     page.get_by_role("button", name="Accept").click()
     page.get_by_text("Take any medicines and").click()
     page.get_by_role("button", name="Next").click()
@@ -345,7 +362,9 @@ def test_picking_up_injury_module_triage_as_injury_module_user(page: Page) -> No
     expect(page.locator("#main-content")).to_contain_text("Injury Module")
     expect(page.locator("#main-content")).to_contain_text("SG1158 - Sunburn")
     expect(page.locator("#main-content")).to_contain_text("SD4050 - ED dehydration")
-    expect(page.locator("#main-content")).to_contain_text("Dx03 - The individual needs to be referred to a treatment centre within 4 hours.")
+    expect(page.locator("#main-content")).to_contain_text(
+        "Dx03 - The individual needs to be referred to a treatment centre within 4 hours."
+    )
     page.get_by_role("button", name="Close").click()
 
     # check triage is gone from call queue
