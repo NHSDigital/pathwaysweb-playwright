@@ -11,6 +11,7 @@ from utils.patient_tools import PatientTools
 from pages.triage_page import TriagePage, UserSkillset
 from pages.target_pages_page import TargetPagesPage
 from pages.consultation_report_page import ConsultationReportPage
+from pages.call_queue_page import CallQueuePage, UserSkillset
 
 
 @pytest.fixture(autouse=True)
@@ -229,7 +230,7 @@ def test_paccs_exploratory(page: Page) -> None:
 
     triage_page.select_release("46.2.0")
 
-    triage_page.launch_as(UserSkillset.OPTION_PACCS.value)
+    triage_page.launch_as(UserSkillset.PACCS.value)
     # complete paccs triage, including going back and return no change, add to call queue
     page.get_by_role("textbox", name="Symptom Search").fill("leg")
     page.get_by_role("link", name="Leg Injury, Blunt").click()
@@ -254,6 +255,7 @@ def test_picking_up_non_paccs_triage_from_call_queue_as_paccs_user(page: Page) -
     Manual regression reference: PaCCS example (part2) on Target Pages tab in spreadsheet in PCORE-3951
     """
     triage_page = TriagePage(page)
+
     patient_details = PatientTools.retrieve_patient("Male First")
     triage_page.populate_patient_details(patient_details)
 
@@ -263,27 +265,17 @@ def test_picking_up_non_paccs_triage_from_call_queue_as_paccs_user(page: Page) -
 
     TargetPagesPage(page, patient_details["party"]).basic_triage()
 
-    items = ConsultationReportPage(
-        page
-    ).get_consultation_report_items()  # case ID grabbed in here
+    # grab case id and other info
+    items = ConsultationReportPage(page).get_consultation_report_items()
 
     # add to call queue
-    page.get_by_role("button", name="Add to Call Queue").click()
-    page.get_by_role("button", name="Yes").click()
-    page.locator("[id='btnClose']").click()
+    CallQueuePage(page).add_to_call_queue()
 
     # go to call queue as PaCCS user
-    page.get_by_label("User Skillset").select_option("PaCCS")
-    page.get_by_role("button", name="Call Queue").click()
+    CallQueuePage(page).go_to_call_queue_as(UserSkillset.PACCS.value)
 
-    # find and continue triage
-    page.locator(
-        f"[data-id='{items["CASE ID"]}']"
-    ).click()  # look for custom attribute to click and continue triage for case id
-    page.get_by_role("button", name="Yes").click()
-    expect(page.locator("#confirmationModal")).to_contain_text("Case Summary")
-    expect(page.locator("#confirmationModal")).to_contain_text(f"{items["CASE ID"]}")
-    page.get_by_text("Close", exact=True).click()
+    # find and continue paccs triage
+    CallQueuePage(page).find_in_call_queue_and_continue_paccs_triage(items["CASE ID"])
 
     # triage continued
     page.get_by_role("textbox", name="Symptom Search").fill("results")
@@ -295,11 +287,10 @@ def test_picking_up_non_paccs_triage_from_call_queue_as_paccs_user(page: Page) -
     page.get_by_role("button", name="Home Care", exact=True).click()
     page.get_by_title("47317975").click()
     page.get_by_role("button", name="Save and Close").click()
+    page.get_by_role("button", name="Close").click()
 
     # check triage is gone from call queue
-    page.get_by_role("button", name="Close").click()
-    page.get_by_label("User Skillset").select_option("PaCCS")
-    page.get_by_role("button", name="Call Queue").click()
+    CallQueuePage(page).go_to_call_queue_as(UserSkillset.PACCS.value)
     expect(page.locator(f"[data-id='{items["CASE ID"]}']")).to_have_count(0)
 
 
@@ -309,6 +300,7 @@ def test_picking_up_injury_module_triage_as_injury_module_user(page: Page) -> No
     Manual regression reference: Injury module example on Target Pages tab in spreadsheet in PCORE-3951
     """
     triage_page = TriagePage(page)
+
     patient_details = PatientTools.retrieve_patient("Male First")
     triage_page.populate_patient_details(patient_details)
 
@@ -324,13 +316,10 @@ def test_picking_up_injury_module_triage_as_injury_module_user(page: Page) -> No
     ).get_consultation_report_items()  # case ID grabbed in here
 
     # add to call queue
-    page.get_by_role("button", name="Add to Call Queue").click()
-    page.get_by_role("button", name="Yes").click()
-    page.locator("[id='btnClose']").click()
+    CallQueuePage(page).add_to_call_queue()
 
     # go to call queue as injury module user
-    page.get_by_label("User Skillset").select_option("Injury Module")
-    page.get_by_role("button", name="Call Queue").click()
+    CallQueuePage(page).go_to_call_queue_as(UserSkillset.INJURY_MODULE.value)
 
     # find and continue triage
     page.locator(f"[data-id='{items["CASE ID"]}']").click()
@@ -339,24 +328,7 @@ def test_picking_up_injury_module_triage_as_injury_module_user(page: Page) -> No
     page.get_by_role("link", name="Continue Triage").click()
 
     # triage continued
-    expect(page.locator("h1")).to_contain_text("Pathways Injury Module")
-    page.locator("#PartialStandard div").filter(
-        has_text="bite or sting No 111 Online answer text This means a bite by a human, animal or"
-    ).nth(2).click()
-    page.get_by_role("button", name="yes").click()
-    page.get_by_role("button", name="sunburn").click()
-    page.get_by_role("button", name="no", exact=True).click()
-    page.get_by_role("button", name="no", exact=True).click()
-    page.get_by_role("button", name="passing less urine than normal").click()
-    expect(page.locator("#main-content")).to_contain_text(
-        "PW987.1800 Refer to a Treatment Centre within 4 hours"
-    )
-    page.get_by_role("button", name="Accept").click()
-    page.get_by_text("Take any medicines and").click()
-    page.get_by_role("button", name="Next").click()
-    expect(page.locator("h1")).to_contain_text("Interim care advice for: Burn, Sun")
-    page.get_by_title("47850377").click()
-    page.get_by_role("button", name="Save and Close").click()
+    CallQueuePage(page).dx03_injury_module_triage_continued_from_call_queue()
 
     # assertions for injury module outcome and completion
     expect(page.locator("#main-content")).to_contain_text("Injury Module")
@@ -368,6 +340,5 @@ def test_picking_up_injury_module_triage_as_injury_module_user(page: Page) -> No
     page.get_by_role("button", name="Close").click()
 
     # check triage is gone from call queue
-    page.get_by_label("User Skillset").select_option("Injury Module")
-    page.get_by_role("button", name="Call Queue").click()
+    CallQueuePage(page).go_to_call_queue_as(UserSkillset.INJURY_MODULE.value)
     expect(page.locator(f"[data-id='{items["CASE ID"]}']")).to_have_count(0)
