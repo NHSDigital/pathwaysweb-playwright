@@ -1,27 +1,47 @@
 {
     "_comment": "This file can be used to store test patient data for triages, and then pulled through using the utils.patient_tools PatientTools utility. Based on UserTools functionality",
     "Male First": {
-        "first_name": "Joe",
-        "last_name": "Bloggs",
+        "first_name": "Saru",
+        "last_name": "Testpatient",
         "age": "Adult (16 years and over)",
         "postcode": "DH1 2HP",
         "gender": "Male",
         "party": "1st Party"
     },
     "Male Third": {
-        "first_name": "Simon",
-        "last_name": "Smith",
+        "first_name": "Brad",
+        "last_name": "Testpatient",
         "age": "Adult (16 years and over)",
         "postcode": "DH1 2HP",
         "gender": "Male",
         "party": "3rd Party"
     },
+    "Female First": {
+        "first_name": "Philippa",
+        "last_name": "Testpatient",
+        "age": "Adult (16 years and over)",
+        "postcode": "DH1 2HP",
+        "gender": "Female",
+        "party": "1st Party"
+    },
     "Female Third": {
-        "first_name": "Joanne",
-        "last_name": "Smith",
+        "first_name": "Beckett",
+        "last_name": "Testpatient",
         "age": "Adult (16 years and over)",
         "postcode": "DH1 2HP",
         "gender": "Female",
         "party": "3rd Party"
+    },
+    "All Details Patient": {
+        "first_name": "Fry",
+        "last_name": "Testpatient",
+        "age": "Child (5 to less than 16 years)",
+        "dob": "01/01/2020",
+        "postcode": "L1 1NY",
+        "telephone": "07890000000",
+        "gender": "Female",
+        "party": "3rd Party",
+        "notes": "Notes test",
+        "home_gp": "1234"
     }
 }

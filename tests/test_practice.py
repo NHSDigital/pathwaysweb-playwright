@@ -7,6 +7,7 @@ from playwright.sync_api import Page, expect
 from utils.user_tools import UserTools
 from utils.patient_tools import PatientTools
 from pages.triage_page import TriagePage, UserSkillset
+from pages.triage_question_page import TriageQuestionPage
 
 
 @pytest.fixture(autouse=True)
@@ -14,22 +15,31 @@ def admin_login(page: Page) -> None:
     UserTools.log_in_as_user(page, "Admin")
     page.get_by_role("link", name="Start").click()
 
+def test_basic_triage(page: Page) -> None:
+    """
+    This test completes a basic triage as a 111 call handler
+    """
+    triage_page = TriagePage(page)
+    patient_details = PatientTools.retrieve_patient("All Details Patient")
+    triage_page.populate_patient_details(patient_details)
+    triage_page.populate_dob_patient_details(patient_details)
+    triage_page.populate_extra_patient_details(patient_details)
+    triage_page.select_release("46.2.0")
+    triage_page.launch_as(UserSkillset.OPTION_111_CALL_HANDLER.value)
 
-# @pytest.fixture()
-# def patient_details(page: Page) -> None:
-#     return PatientTools.retrieve_patient(page, "Joe Bloggs")  # dont need a fixture if we add it in the test. Removed arg - patient_details: dict
+    TriageQuestionPage(
+        page, patient_details["party"]
+    ).basic_triage_as_111_call_handler()
 
 
 def test_repeat_caller(page: Page) -> None:
     """
     This test completes a Dx93 repeat caller triage
-
-    Manual regression reference: Example 1 "Call Handler DoS" in PCORE-3951
     """
     triage_page = TriagePage(page)
 
     # using utils PatientTools so we can pull in the details of the patient
-    patient_details = PatientTools.retrieve_patient("Joe Bloggs")
+    patient_details = PatientTools.retrieve_patient("Male First")
     # uses retrieved patient details, handled by TriagePage
     triage_page.populate_patient_details(patient_details)
 
@@ -41,9 +51,11 @@ def test_repeat_caller(page: Page) -> None:
     # using enum
     triage_page.launch_as(UserSkillset.OPTION_111_CALL_HANDLER.value)
 
-    triage_page.report_of_results_for_repeat_caller()
+    TriageQuestionPage(
+        page, patient_details["party"]
+    ).report_of_results_for_repeat_caller()
     expect(page.locator("#main-content")).to_contain_text(
-        "Consultation Report for Joe Bloggs"
+        f"Consultation Report for {patient_details["first_name"]} {patient_details["last_name"]}"
     )
     expect(page.locator("#main-content")).to_contain_text(
         "SYMPTOM GROUP: SG1191 - Health and Social Information"
@@ -59,16 +71,19 @@ def test_repeat_caller(page: Page) -> None:
 def test_emergency_ambulance_response(page: Page) -> None:
     """
     This test completes a Dx0116 Emergency Ambulance response triage
-
-    Manual regression reference: Example 2 "DxDispositionIL" in PCORE-3951
     """
     triage_page = TriagePage(page)
-    patient_details = PatientTools.retrieve_patient("Joe Bloggs")
+    patient_details = PatientTools.retrieve_patient("Male First")
     triage_page.populate_patient_details(patient_details)
     triage_page.select_release("46.2.0")
     triage_page.launch_as(UserSkillset.OPTION_999_CALL_HANDLER.value)
 
-    triage_page.emergency_ambluance_response_major_blood_loss()
+    TriageQuestionPage(
+        page, patient_details["party"]
+    ).emergency_ambluance_response_major_blood_loss()
+    expect(page.locator("#main-content")).to_contain_text(
+        f"Consultation Report for {patient_details["first_name"]} {patient_details["last_name"]}"
+    )
     expect(page.locator("#main-content")).to_contain_text(
         "SG1193 - Immediate threats to life"
     )

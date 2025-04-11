@@ -23,12 +23,6 @@ class TargetPagesPage:
 
         self.emergency_ambulance = "An emergency ambulance is being arranged"
 
-    def basic_triage(self) -> None:
-        self.page.get_by_role("button", name="a report of results or tests").click()
-        self.page.get_by_role("button", name="Accept").click()
-        self.page.get_by_text("We will pass the details onto").click()
-        self.page.get_by_role("button", name=self.save_and_close).click()
-
     def call_handler_dos_triage(self) -> None:
         self.page.get_by_role("button", name="a report of results or tests").click()
         expect(self.main_content).to_contain_text(
@@ -180,7 +174,9 @@ class TargetPagesPage:
         )
         self.page.get_by_text("If the call gets cut off,").click()
         self.page.get_by_role("button", name=self.save_and_close).click()
-        expect(self.main_content).to_contain_text("Consultation Report for Joe Bloggs")
+        expect(self.main_content).to_contain_text(
+            "Consultation Report for Saru Testpatient"
+        )
         expect(self.main_content).to_contain_text(
             "THIS INJURY MAY BE SUITABLE FOR TRANSFER TO A SERVICE ADVISOR UNLESS A REASON NOT TO HAS BEEN IDENTIFIED."
         )

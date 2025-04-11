@@ -12,6 +12,7 @@ from pages.triage_page import TriagePage, UserSkillset
 from pages.target_pages_page import TargetPagesPage
 from pages.consultation_report_page import ConsultationReportPage
 from pages.call_queue_page import CallQueuePage, UserSkillset
+from pages.triage_question_page import TriageQuestionPage
 
 
 @pytest.fixture(autouse=True)
@@ -37,7 +38,7 @@ def test_call_handler_dos(page: Page) -> None:
 
     TargetPagesPage(page, patient_details["party"]).call_handler_dos_triage()
     expect(page.locator("#main-content")).to_contain_text(
-        "Consultation Report for Joe Bloggs"
+        f"Consultation Report for {patient_details["first_name"]} {patient_details["last_name"]}"
     )
     expect(page.locator("#main-content")).to_contain_text(
         "SYMPTOM GROUP: SG1191 - Health and Social Information"
@@ -64,7 +65,7 @@ def test_dx_disposition_il(page: Page) -> None:
 
     TargetPagesPage(page, patient_details["party"]).dx_disposition_il_triage()
     expect(page.locator("#main-content")).to_contain_text(
-        "Consultation Report for Joe Bloggs"
+        f"Consultation Report for {patient_details["first_name"]} {patient_details["last_name"]}"
     )
     expect(page.locator("#main-content")).to_contain_text(
         "SG1193 - Immediate threats to life"
@@ -100,7 +101,7 @@ def test_cx_care_advice_hc(page: Page) -> None:
 
     TargetPagesPage(page, patient_details["party"]).cx_care_advice_hc_triage()
     expect(page.locator("#main-content")).to_contain_text(
-        "Consultation Report for Simon Smith"
+        f"Consultation Report for {patient_details["first_name"]} {patient_details["last_name"]}"
     )
     expect(page.locator("#main-content")).to_contain_text(
         "SG1191 - Health and Social Information"
@@ -132,7 +133,7 @@ def test_cx_care_advice_il(page: Page) -> None:
 
     TargetPagesPage(page, patient_details["party"]).cx_care_advice_il_triage()
     expect(page.locator("#main-content")).to_contain_text(
-        "Consultation Report for Joe Bloggs"
+        f"Consultation Report for {patient_details["first_name"]} {patient_details["last_name"]}"
     )
     expect(page.locator("#main-content")).to_contain_text(
         "SG1193 - Immediate threats to life"
@@ -170,7 +171,7 @@ def test_pa1(page: Page) -> None:
 
     TargetPagesPage(page, patient_details["party"]).pa1_triage()
     expect(page.locator("#main-content")).to_contain_text(
-        "Consultation Report for Joanne Smith"
+        f"Consultation Report for {patient_details["first_name"]} {patient_details["last_name"]}"
     )
     expect(page.locator("#main-content")).to_contain_text(
         "SG1193 - Immediate threats to life"
@@ -203,7 +204,7 @@ def test_clinician_dos(page: Page) -> None:
 
     TargetPagesPage(page, patient_details["party"]).clinician_dos_triage()
     expect(page.locator("#main-content")).to_contain_text(
-        "Consultation Report for Simon Smith"
+        f"Consultation Report for {patient_details["first_name"]} {patient_details["last_name"]}"
     )
     expect(page.locator("#main-content")).to_contain_text(
         "SG1140 - Predetermined Management Plan"
@@ -263,7 +264,7 @@ def test_picking_up_non_paccs_triage_from_call_queue_as_paccs_user(page: Page) -
 
     triage_page.launch_as(UserSkillset.OPTION_111_CALL_HANDLER.value)
 
-    TargetPagesPage(page, patient_details["party"]).basic_triage()
+    TriageQuestionPage(page, patient_details["party"]).basic_triage_as_111_call_handler()
 
     # grab case id and other info
     items = ConsultationReportPage(page).get_consultation_report_items()
@@ -294,7 +295,7 @@ def test_picking_up_non_paccs_triage_from_call_queue_as_paccs_user(page: Page) -
     expect(page.locator(f"[data-id='{items["CASE ID"]}']")).to_have_count(0)
 
 
-def test_picking_up_injury_module_triage_as_injury_module_user(page: Page) -> None:
+def test_picking_up_injury_module_triage_from_call_queue_as_injury_module_user(page: Page) -> None:
     """
     This test adds an injury module triage to call queue, and picked up as a Injury Module user to complete
     Manual regression reference: Injury module example on Target Pages tab in spreadsheet in PCORE-3951
