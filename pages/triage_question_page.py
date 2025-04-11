@@ -24,17 +24,21 @@ class TriageQuestionPage:
 
         self.report_of_results = "a report of results or tests"
 
-        self.summary_content = page.locator("[aria-labelledby='panelSummary']").locator(".panel-body")
+        self.summary_content = page.locator("[aria-labelledby='panelSummary']").locator(
+            ".panel-body"
+        )
 
-        self.call_report_content = page.locator("[aria-labelledby='call-report-heading']").locator(".panel-body")
+        self.call_report_content = page.locator(
+            "[aria-labelledby='call-report-heading']"
+        ).locator(".panel-body")
 
     def answer_question(self, answer: str | tuple) -> None:
         """
         If a string is provided then the button matching the text is clicked.
-        If a tuple is provided then the button matching the first text is clicked, 
+        If a tuple is provided then the button matching the first text is clicked,
         and the second text provided is entered in the please specify field.
 
-        Providing the following in the test step: 
+        Providing the following in the test step:
         ("illness or other health problem (specify)", "test illness")
         results in clicking the button with the text "illness or other health problem (specify)"
         and then entering "test illness" in the please specify field.
@@ -54,7 +58,7 @@ class TriageQuestionPage:
             self.answer_question(answer)
 
     def restart_triage(self) -> None:
-        self.page.get_by_role("button", name="Restart Triage").click()        
+        self.page.get_by_role("button", name="Restart Triage").click()
 
     def basic_triage_as_111_call_handler(self) -> None:
         self.answer_question(self.report_of_results)

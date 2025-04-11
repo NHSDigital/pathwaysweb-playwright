@@ -15,9 +15,11 @@ def admin_login(page: Page) -> None:
     UserTools.log_in_as_user(page, "Admin")
     page.get_by_role("link", name="Start").click()
 
+
 @pytest.fixture()
 def select_release(page: Page, admin_login) -> None:
     TriagePage(page).select_release("46.2.0")
+
 
 @pytest.fixture()
 # chained fixtures so only need to add the last one in to test
@@ -28,7 +30,9 @@ def patient_details(page: Page, select_release) -> dict:
     return patient
 
 
-def test_triage_data_cleared_when_triage_is_restarted(page: Page, patient_details: dict) -> None:
+def test_triage_data_cleared_when_triage_is_restarted(
+    page: Page, patient_details: dict
+) -> None:
     """
     This test begins a triage, clicks Restart Triage and confirms the Summary and Call Report are cleared
     """
@@ -37,17 +41,16 @@ def test_triage_data_cleared_when_triage_is_restarted(page: Page, patient_detail
 
     triage_question_page = TriageQuestionPage(page, patient_details["party"])
     triage_question_page.answer_multiple_questions(
-            [
-                "an injury, illness or other health problem",
-                "no",
-                ("illness or other health problem (specify)", "test illness"),
-                "no",
-                "more",
-                "none of the above"
-            ]
-        )
-    
+        [
+            "an injury, illness or other health problem",
+            "no",
+            ("illness or other health problem (specify)", "test illness"),
+            "no",
+            "more",
+            "none of the above",
+        ]
+    )
+
     triage_question_page.restart_triage()
     expect(triage_question_page.summary_content).to_have_text("\n")
     expect(triage_question_page.call_report_content).to_have_text("\n")
-
