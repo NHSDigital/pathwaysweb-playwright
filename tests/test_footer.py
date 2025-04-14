@@ -10,10 +10,12 @@ from pages.base_page import BasePage
 
 @pytest.fixture()
 def admin_login(page: Page) -> dict:
-    return UserTools.log_in_as_user(page, "Admin")    
+    return UserTools.log_in_as_user(page, "Admin")
 
 
-def test_terms_of_use_available_when_logged_in_or_out(page: Page, admin_login: dict) -> None:
+def test_terms_of_use_available_when_logged_in_or_out(
+    page: Page, admin_login: dict
+) -> None:
     page.get_by_role("contentinfo").get_by_role("link", name="Terms Of Use").click()
     expect(page.locator(".panel-heading")).to_contain_text("Pathways Web Terms Of Use")
     # expect(page.get_by_text("\"Pathways Web\", is built by")).to_be_visible()

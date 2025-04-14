@@ -53,4 +53,4 @@ class TriagePage:
 
     def jump_to(self, item: str) -> None:
         self.page.get_by_role("textbox", name="Jump to:").fill(item)
-        self.page.get_by_role("button", name="Jump").click()    
+        self.page.get_by_role("button", name="Jump").click()
