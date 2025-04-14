@@ -74,6 +74,18 @@ class TriageQuestionPage:
         self.page.get_by_role("button", name=self.save_and_close).click()
         self.page.get_by_role("button", name="Accept").click()
 
+    def basic_paccs_triage(self) -> None:
+        self.page.get_by_role("textbox", name="Symptom Search").fill("results")
+        self.page.get_by_role("link", name="Report of results or tests").click()
+        self.page.get_by_role(
+            "checkbox",
+            name="Report of results or tests - case able to be completed Suspected",
+        ).check()
+        self.page.get_by_role("button", name="Home Care", exact=True).click()
+        self.page.get_by_title("47317975").click()
+        # If there are any new symptoms, or if the condition gets worse, changes or you have any other concerns call us back.
+        self.page.get_by_role("button", name="Save and Close").click()
+
     def report_of_results_for_repeat_caller(self) -> None:
         self.answer_question(self.report_of_results)
         expect(self.main_content).to_contain_text(

@@ -1,5 +1,5 @@
 """
-This file contains tests that complete triages.
+This file contains practice tests.
 """
 
 import pytest

@@ -264,7 +264,9 @@ def test_picking_up_non_paccs_triage_from_call_queue_as_paccs_user(page: Page) -
 
     triage_page.launch_as(UserSkillset.OPTION_111_CALL_HANDLER.value)
 
-    TriageQuestionPage(page, patient_details["party"]).basic_triage_as_111_call_handler()
+    TriageQuestionPage(
+        page, patient_details["party"]
+    ).basic_triage_as_111_call_handler()
 
     # grab case id and other info
     items = ConsultationReportPage(page).get_consultation_report_items()
@@ -276,18 +278,12 @@ def test_picking_up_non_paccs_triage_from_call_queue_as_paccs_user(page: Page) -
     CallQueuePage(page).go_to_call_queue_as(UserSkillset.PACCS.value)
 
     # find and continue paccs triage
-    CallQueuePage(page).find_in_call_queue_and_continue_paccs_triage(items["CASE ID"])
+    CallQueuePage(page).find_in_call_queue_and_continue_paccs_triage(
+        items["CASE ID"], items["PATIENT"]
+    )
 
     # triage continued
-    page.get_by_role("textbox", name="Symptom Search").fill("results")
-    page.get_by_role("link", name="Report of results or tests").click()
-    page.get_by_role(
-        "checkbox",
-        name="Report of results or tests - case able to be completed Suspected",
-    ).check()
-    page.get_by_role("button", name="Home Care", exact=True).click()
-    page.get_by_title("47317975").click()
-    page.get_by_role("button", name="Save and Close").click()
+    TriageQuestionPage(page).basic_paccs_triage()
     page.get_by_role("button", name="Close").click()
 
     # check triage is gone from call queue
@@ -295,7 +291,9 @@ def test_picking_up_non_paccs_triage_from_call_queue_as_paccs_user(page: Page) -
     expect(page.locator(f"[data-id='{items["CASE ID"]}']")).to_have_count(0)
 
 
-def test_picking_up_injury_module_triage_from_call_queue_as_injury_module_user(page: Page) -> None:
+def test_picking_up_injury_module_triage_from_call_queue_as_injury_module_user(
+    page: Page,
+) -> None:
     """
     This test adds an injury module triage to call queue, and picked up as a Injury Module user to complete
     Manual regression reference: Injury module example on Target Pages tab in spreadsheet in PCORE-3951
@@ -323,10 +321,9 @@ def test_picking_up_injury_module_triage_from_call_queue_as_injury_module_user(p
     CallQueuePage(page).go_to_call_queue_as(UserSkillset.INJURY_MODULE.value)
 
     # find and continue triage
-    page.locator(f"[data-id='{items["CASE ID"]}']").click()
-    page.get_by_role("button", name="Yes").click()
-    expect(page.locator("#main-content")).to_contain_text(f"{items["CASE ID"]}")
-    page.get_by_role("link", name="Continue Triage").click()
+    CallQueuePage(page).find_in_call_queue_and_continue_injury_module_triage(
+        items["CASE ID"], items["PATIENT"]
+    )
 
     # triage continued
     CallQueuePage(page).dx03_injury_module_triage_continued_from_call_queue()

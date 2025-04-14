@@ -1,14 +1,13 @@
 from playwright.sync_api import Page, expect
-from enum import Enum
+from enum import StrEnum
 
 
-class UserSkillset(Enum):
+class UserSkillset(StrEnum):
     OPTION_111_CALL_HANDLER = "111 Call Handler"
     OPTION_999_CALL_HANDLER = "999 Call Handler"
     OPTION_111_CLINICIAN = "111 Clinician"
     PACCS = "PaCCS"
     INJURY_MODULE = "Injury Module"
-    Female = "1"
 
 
 class TriagePage:
@@ -17,6 +16,10 @@ class TriagePage:
 
     def __init__(self, page: Page) -> None:
         self.page = page
+
+    def return_to_triage_page(self) -> None:
+        self.page.get_by_role("link", name="Home NHS Pathways Web").click()
+        self.page.get_by_role("link", name="Start").click()
 
     def populate_patient_details(self, patient_details: dict) -> None:
         self.page.get_by_label("First Name", exact=True).fill(
@@ -47,3 +50,7 @@ class TriagePage:
 
     def select_release(self, release: str) -> None:
         self.page.get_by_label("Select Pathways Release").select_option(release)
+
+    def jump_to(self, item: str) -> None:
+        self.page.get_by_role("textbox", name="Jump to:").fill(item)
+        self.page.get_by_role("button", name="Jump").click()    

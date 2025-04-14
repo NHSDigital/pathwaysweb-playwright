@@ -15,6 +15,9 @@ class CallQueuePage:
     def __init__(self, page: Page) -> None:
         self.page = page
 
+        self.case_summary_modal = self.page.locator("#confirmationModal")
+        self.main_content = self.page.locator("#main-content")
+
     def go_to_call_queue_as(self, user_skillset: str) -> None:
         self.page.get_by_label("User Skillset").select_option(user_skillset)
         self.page.get_by_role("button", name="Call Queue").click()
@@ -24,13 +27,21 @@ class CallQueuePage:
         self.page.get_by_role("button", name="Yes").click()
         self.page.locator("[id='btnClose']").click()
 
-    def find_in_call_queue_and_continue_paccs_triage(self, case_id: str) -> None:
+    def find_in_call_queue_and_continue_paccs_triage(self, case_id: str, patient: str) -> None:
         # look for custom attribute to click and continue triage for case id
         self.page.locator(f"[data-id='{case_id}']").click()
         self.page.get_by_role("button", name="Yes").click()
-        expect(self.page.locator("#confirmationModal")).to_contain_text("Case Summary")
-        expect(self.page.locator("#confirmationModal")).to_contain_text(case_id)
+        expect(self.case_summary_modal).to_contain_text("Case Summary")
+        expect(self.case_summary_modal).to_contain_text(case_id)
+        expect(self.case_summary_modal).to_contain_text(patient)
         self.page.get_by_text("Close", exact=True).click()
+
+    def find_in_call_queue_and_continue_injury_module_triage(self, case_id: str, patient: str) -> None:
+        self.page.locator(f"[data-id='{case_id}']").click()
+        self.page.get_by_role("button", name="Yes").click()
+        expect(self.main_content).to_contain_text(case_id)
+        expect(self.main_content).to_contain_text(patient)
+        self.page.get_by_role("link", name="Continue Triage").click()
 
     def dx03_injury_module_triage_continued_from_call_queue(self) -> None:
         expect(self.page.locator("h1")).to_contain_text("Pathways Injury Module")
@@ -42,7 +53,7 @@ class CallQueuePage:
         self.page.get_by_role("button", name="no", exact=True).click()
         self.page.get_by_role("button", name="no", exact=True).click()
         self.page.get_by_role("button", name="passing less urine than normal").click()
-        expect(self.page.locator("#main-content")).to_contain_text(
+        expect(self.main_content).to_contain_text(
             "PW987.1800 Refer to a Treatment Centre within 4 hours"
         )
         self.page.get_by_role("button", name="Accept").click()
