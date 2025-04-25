@@ -109,7 +109,9 @@ def test_change_first_answer_after_reaching_consultation_summary(
     expect(page.locator("#main-content")).to_contain_text(
         "Injury, illness or other health problem"
     )
-    expect(page.locator("#main-content")).not_to_contain_text("PMA1 - Calling About Self")
+    expect(page.locator("#main-content")).not_to_contain_text(
+        "PMA1 - Calling About Self"
+    )
     expect(page.locator("#main-content")).not_to_contain_text(
         "SG1191 - Health and Social Information"
     )
@@ -122,7 +124,9 @@ def test_change_first_answer_after_reaching_consultation_summary(
     expect(page.locator("#main-content")).not_to_contain_text("Test/results request")
 
 
-def test_change_mid_triage_answer_after_reaching_conultation_summary(page:Page, patient_details: dict) -> None:
+def test_change_mid_triage_answer_after_reaching_conultation_summary(
+    page: Page, patient_details: dict
+) -> None:
     """
     This test completes a triage then chooses change triage from the consulatation summary screen and changes a mid triage answer.
     The test confirms that the consultation summary screen reflects the changed answer.
@@ -148,8 +152,10 @@ def test_change_mid_triage_answer_after_reaching_conultation_summary(page:Page, 
     )
     expect(page.locator("#main-content")).to_contain_text(
         "Injury, illness or other health problem"
-    )   
-    expect(page.locator("#main-content")).to_contain_text("The problem affected one eye.")
+    )
+    expect(page.locator("#main-content")).to_contain_text(
+        "The problem affected one eye."
+    )
 
     # change triage/first answer
     page.get_by_role("link", name="< Change Triage").click()
@@ -163,7 +169,9 @@ def test_change_mid_triage_answer_after_reaching_conultation_summary(page:Page, 
     page.get_by_text("Someone else should drive the individual.").click()
     page.get_by_role("button", name="Next").click()
     page.get_by_role("checkbox", name="Don't rub the eye.").check()
-    page.get_by_text("If there are any new symptoms, or if the condition gets worse, changes or you").click()
+    page.get_by_text(
+        "If there are any new symptoms, or if the condition gets worse, changes or you"
+    ).click()
     page.get_by_role("button", name="Save and Close").click()
 
     expect(page.locator("#main-content")).to_contain_text(
@@ -180,6 +188,7 @@ def test_change_mid_triage_answer_after_reaching_conultation_summary(page:Page, 
     )
     expect(page.locator("#main-content")).to_contain_text(
         "Injury, illness or other health problem"
-    )   
-    expect(page.locator("#main-content")).to_contain_text("The problem affected both eyes.")
-    
+    )
+    expect(page.locator("#main-content")).to_contain_text(
+        "The problem affected both eyes."
+    )
