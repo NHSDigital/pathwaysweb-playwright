@@ -132,3 +132,33 @@ class TriageQuestionPage:
             "NO INSTRUCTIONS GIVEN AS NOT SAFE AND/OR APPROPRIATE."
         ).check()
         self.page.get_by_role("button", name=self.save_and_close).click()
+
+    def dx_03_eye_or_eyelid_problems_triage(self) -> None:
+        self.page.get_by_role("button", name="an injury, illness or other").click()
+        self.page.get_by_role("button", name="no", exact=True).click()
+        self.page.get_by_role("button", name="illness or other health").click()
+        self.page.get_by_role("textbox", name="Please specify").click()
+        self.page.get_by_role("textbox", name="Please specify").fill("test")
+        self.page.get_by_role("button", name="Ok").click()
+        self.page.get_by_role("button", name="no", exact=True).click()
+        self.page.get_by_role("button", name="more").click()
+        self.page.get_by_role("button", name="none of the above").click()
+        self.page.get_by_role("button", name="yes - normal, warm or hot").click()
+        self.page.get_by_role("button", name="eye").click()
+        self.page.get_by_role("button", name="Eye or Eyelid Problems").click()
+        self.page.get_by_role("button", name="Start - Eye or Eyelid Problems").click()
+        self.page.get_by_role("button", name="eye redness or irritation").click()
+        self.page.get_by_role("button", name="no", exact=True).click()
+        self.page.get_by_role("button", name="no", exact=True).click()
+        self.page.get_by_role("button", name="ONE eye").click()
+        self.page.get_by_role("button", name="no", exact=True).click()
+        self.page.get_by_role("button", name="yes").click()
+        self.page.get_by_role("button", name="Accept").click()
+        self.page.get_by_text("Someone else should drive the individual.").click()
+        self.page.get_by_role("button", name="Next").click()
+        self.page.get_by_role("checkbox", name="Don't rub the eye.").check()
+        self.page.get_by_role(
+            "checkbox",
+            name="If there are any new symptoms, or if the condition gets worse, changes or you have any other concerns, call us back.",
+        ).check()
+        self.page.get_by_role("button", name="Save and Close").click()
