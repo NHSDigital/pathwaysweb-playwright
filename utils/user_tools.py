@@ -1,4 +1,5 @@
 import json
+import os
 import logging
 import os
 from pathlib import Path
@@ -8,7 +9,7 @@ from pages.login_page import LoginPage
 
 
 logger = logging.getLogger(__name__)
-USERS_FILE = Path(__file__).parent.parent / "users.json"
+USERS_FILE = Path(os.getcwd()) / "users.json"
 
 ENV_FILE = Path(__file__).parent.parent / "local.env"
 
@@ -32,7 +33,7 @@ class UserTools:
         with open(USERS_FILE, "r") as file:
             user_data = json.loads(file.read())
 
-        if not user in user_data:
+        if user not in user_data:
             raise UserToolsException(f"User [{user}] is not present in users.json")
 
         logger.debug(f"Returning user: {user_data[user]}")

@@ -6,7 +6,6 @@ import pytest_playwright_axe
 
 
 logger = logging.getLogger(__name__)
-
 PATH_FOR_REPORT = Path(os.getcwd()) / "axe-reports"
 
 
@@ -16,6 +15,7 @@ class Axe():
     under test to identify any accessibility concerns.
     """
 
+    @staticmethod
     def run(
         page: Page,
         filename: str = "",
@@ -56,6 +56,7 @@ class Axe():
             json_report_generated=json_report_generated,
         )
 
+    @staticmethod
     def run_list(
         page: Page,
         page_list: list[str],
