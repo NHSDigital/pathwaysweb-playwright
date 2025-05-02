@@ -4,14 +4,11 @@ import logging
 import os
 from pathlib import Path
 from playwright.sync_api import Page, expect
-from dotenv import load_dotenv
 from pages.login_page import LoginPage
 
 
 logger = logging.getLogger(__name__)
 USERS_FILE = Path(os.getcwd()) / "users.json"
-
-ENV_FILE = Path(__file__).parent.parent / "local.env"
 
 
 class UserTools:
@@ -39,9 +36,8 @@ class UserTools:
         logger.debug(f"Returning user: {user_data[user]}")
         return user_data[user]
 
+    @staticmethod
     def log_in_as_user(page: Page, user: str, accept_cookies: bool = True) -> dict:
-        # Load dotenv to enable retrieval of a password from local.env file
-        load_dotenv(ENV_FILE)
         user_details = UserTools.retrieve_user(user)
         LoginPage(page).login(
             user_details["email"], os.getenv("PWW_PASS"), accept_cookies
