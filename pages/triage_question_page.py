@@ -22,6 +22,8 @@ class TriageQuestionPage:
 
         self.save_and_close = "Save and Close"
 
+        self.please_specify = "Please specify"
+
         self.report_of_results = "a report of results or tests"
 
         self.summary_content = page.locator("[aria-labelledby='panelSummary']").locator(
@@ -45,7 +47,7 @@ class TriageQuestionPage:
         """
         if isinstance(answer, tuple):
             self.page.get_by_role("button", name=answer[0], exact=True).click()
-            self.page.get_by_role("textbox", name="Please specify").fill(answer[1])
+            self.page.get_by_role("textbox", name=self.please_specify).fill(answer[1])
             self.page.get_by_role("button", name="Ok").click()
         else:
             self.page.get_by_role("button", name=answer, exact=True).click()
@@ -84,7 +86,7 @@ class TriageQuestionPage:
         self.page.get_by_role("button", name="Home Care", exact=True).click()
         self.page.get_by_title("47317975").click()
         # If there are any new symptoms, or if the condition gets worse, changes or you have any other concerns call us back.
-        self.page.get_by_role("button", name="Save and Close").click()
+        self.page.get_by_role("button", name=self.save_and_close).click()
 
     def report_of_results_for_repeat_caller(self) -> None:
         self.answer_question(self.report_of_results)
@@ -137,8 +139,8 @@ class TriageQuestionPage:
         self.page.get_by_role("button", name="an injury, illness or other").click()
         self.page.get_by_role("button", name="no", exact=True).click()
         self.page.get_by_role("button", name="illness or other health").click()
-        self.page.get_by_role("textbox", name="Please specify").click()
-        self.page.get_by_role("textbox", name="Please specify").fill("test")
+        self.page.get_by_role("textbox", name=self.please_specify).click()
+        self.page.get_by_role("textbox", name=self.please_specify).fill("test")
         self.page.get_by_role("button", name="Ok").click()
         self.page.get_by_role("button", name="no", exact=True).click()
         self.page.get_by_role("button", name="more").click()
@@ -161,4 +163,4 @@ class TriageQuestionPage:
             "checkbox",
             name="If there are any new symptoms, or if the condition gets worse, changes or you have any other concerns, call us back.",
         ).check()
-        self.page.get_by_role("button", name="Save and Close").click()
+        self.page.get_by_role("button", name=self.save_and_close).click()

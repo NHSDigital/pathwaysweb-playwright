@@ -19,7 +19,7 @@ class TargetPagesPage:
 
         self.main_content = self.page.locator("#main-content")
 
-        self.save_and_close = "Save and Close"
+        self.save_and_close = page.get_by_role("button", name="Save and Close")
 
         self.emergency_ambulance = "An emergency ambulance is being arranged"
 
@@ -36,7 +36,7 @@ class TargetPagesPage:
         self.page.get_by_role("button", name="Accept", exact=True).nth(0).click()
         self.page.get_by_role("checkbox", name="If there are any new symptoms").check()
         expect(self.main_content).to_contain_text("Worsening")
-        self.page.get_by_role("button", name=self.save_and_close).click()
+        self.save_and_close.click()
 
     def dx_disposition_il_triage(self) -> None:
         self.page.get_by_role("button", name="yes").click()
@@ -56,7 +56,7 @@ class TargetPagesPage:
             "CONTINUING BEYOND THIS SCREEN WILL CLOSE THE CALL"
         )
         self.page.get_by_text("EITHER: check the call report").click()
-        self.page.get_by_role("button", name=self.save_and_close).click()
+        self.save_and_close.click()
 
     def cx_care_advice_hc_triage(self) -> None:
         self.page.get_by_role("button", name="a report of results or tests").click()
@@ -76,7 +76,7 @@ class TargetPagesPage:
             "10184849"
         )
         self.page.get_by_role("checkbox", name="Unless advised not to, or it").check()
-        self.page.get_by_role("button", name=self.save_and_close).click()
+        self.save_and_close.click()
 
     def cx_care_advice_il_triage(self) -> None:
         self.page.get_by_role("button", name="yes").click()
@@ -107,7 +107,7 @@ class TargetPagesPage:
         self.page.get_by_role("button", name="no", exact=True).click()
         expect(self.main_content).to_contain_text("PA25.4600 Closing instructions")
         self.page.get_by_text("If you can, ask for someone").click()
-        self.page.get_by_role("button", name=self.save_and_close).click()
+        self.save_and_close.click()
 
     def pa1_triage(self) -> None:
         self.page.get_by_role("button", name="no", exact=True).click()
@@ -125,7 +125,7 @@ class TargetPagesPage:
         self.page.get_by_role("button", name="the phone line went dead").click()
         self.page.get_by_role("button", name="yes").click()
         self.page.get_by_role("checkbox", name="EITHER: check the call report").check()
-        self.page.get_by_role("button", name=self.save_and_close).click()
+        self.save_and_close.click()
 
     def clinician_dos_triage(self) -> None:
         self.page.get_by_role("button", name="a community service").click()
@@ -151,7 +151,7 @@ class TargetPagesPage:
             "checkbox",
             name="NO INSTRUCTIONS GIVEN AS CALL RELATES TO AN INDIVIDUAL WHO HAS DIED.",
         ).check()
-        self.page.get_by_role("button", name=self.save_and_close).click()
+        self.save_and_close.click()
 
     def injury_module_triage(self) -> None:
         self.page.get_by_role("button", name="an injury, illness or other").click()
@@ -173,7 +173,7 @@ class TargetPagesPage:
             "PA124.12600 Speak to a Service Advisor Immediately for Injury Assessment"
         )
         self.page.get_by_text("If the call gets cut off,").click()
-        self.page.get_by_role("button", name=self.save_and_close).click()
+        self.save_and_close.click()
         expect(self.main_content).to_contain_text(
             "Consultation Report for Saru Testpatient"
         )

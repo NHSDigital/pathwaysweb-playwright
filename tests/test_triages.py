@@ -57,7 +57,7 @@ def test_triage_data_cleared_when_triage_is_restarted(
     expect(triage_question_page.call_report_content).to_have_text("\n")
 
 
-def test_change_first_answer_after_reaching_consultation_summary(
+def test_change_first_answer_after_reaching_consultation_report(
     page: Page, patient_details: dict
 ) -> None:
     """
@@ -124,7 +124,7 @@ def test_change_first_answer_after_reaching_consultation_summary(
     expect(page.locator("#main-content")).not_to_contain_text("Test/results request")
 
 
-def test_change_mid_triage_answer_after_reaching_conultation_summary(
+def test_change_mid_triage_answer_after_reaching_conultation_report(
     page: Page, patient_details: dict
 ) -> None:
     """

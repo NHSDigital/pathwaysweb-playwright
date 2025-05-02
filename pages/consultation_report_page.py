@@ -9,17 +9,6 @@ class ConsultationReportPage:
     def __init__(self, page: Page) -> None:
         self.page = page
 
-    def export_as_xml(self) -> None:
-        with self.page.expect_download() as download1_info:
-            self.page.get_by_role("link", name="Export triage to XML").click()
-        downloaded_file_path = (
-            f"{os.getcwd()}/test-results/{download1_info.value.suggested_filename}"
-        )
-        download1_info.value.save_as(downloaded_file_path)
-        # checking its contents is a WIP!
-        # xml_output = ElementTree.parse(downloaded_file_path)
-        # print(xml_output)
-
     def get_consultation_report_items(self) -> dict:
         # grabbing dt/dd items from page
         section = (
@@ -44,3 +33,23 @@ class ConsultationReportPage:
             element_nth += 1
 
         return results
+
+    def export_as_xml(self) -> None:
+        with self.page.expect_download() as download1_info:
+            self.page.get_by_role("link", name="Export triage to XML").click()
+        downloaded_file_path = (
+            f"{os.getcwd()}/test-results/{download1_info.value.suggested_filename}"
+        )
+        download1_info.value.save_as(downloaded_file_path)
+        # checking its contents is a WIP!
+        # xml_output = ElementTree.parse(downloaded_file_path)
+        # print(xml_output)
+
+    def export_as_pdf(self) -> str:
+        with self.page.expect_download() as download_pdf:
+            self.page.get_by_role("link", name="Export Consultation Summary").click()
+        downloaded_file_path = (
+            f"{os.getcwd()}/test-results/{download_pdf.value.suggested_filename}"
+        )
+        download_pdf.value.save_as(downloaded_file_path)
+        return downloaded_file_path
