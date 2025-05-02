@@ -1,7 +1,10 @@
 import json
 import os
 import logging
+import os
 from pathlib import Path
+from playwright.sync_api import Page, expect
+from pages.login_page import LoginPage
 
 
 logger = logging.getLogger(__name__)
@@ -24,7 +27,7 @@ class UserTools:
         Returns:
             dict: A Python dictionary with the details of the user requested, if present.
         """
-        with open(USERS_FILE, 'r') as file:
+        with open(USERS_FILE, "r") as file:
             user_data = json.loads(file.read())
 
         if user not in user_data:
@@ -32,6 +35,14 @@ class UserTools:
 
         logger.debug(f"Returning user: {user_data[user]}")
         return user_data[user]
+
+    @staticmethod
+    def log_in_as_user(page: Page, user: str, accept_cookies: bool = True) -> dict:
+        user_details = UserTools.retrieve_user(user)
+        LoginPage(page).login(
+            user_details["email"], os.getenv("PWW_PASS"), accept_cookies
+        )
+        return user_details  # returning so we can use the user details in the tests
 
 
 class UserToolsException(Exception):
