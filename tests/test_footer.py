@@ -18,6 +18,7 @@ def test_terms_of_use_available_when_logged_in_or_out(
 ) -> None:
     page.get_by_role("contentinfo").get_by_role("link", name="Terms Of Use").click()
     expect(page.locator(".panel-heading")).to_contain_text("Pathways Web Terms Of Use")
-    # expect(page.get_by_text("\"Pathways Web\", is built by")).to_be_visible()
     BasePage(page).show_personal_menu(admin_login["email"])
     BasePage(page).select_log_off()
+    page.get_by_role("contentinfo").get_by_role("link", name="Terms Of Use").click()
+    expect(page.locator(".panel-heading")).to_contain_text("Pathways Web Terms Of Use")
