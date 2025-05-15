@@ -15,6 +15,7 @@ def admin_login(page: Page) -> None:
     UserTools.log_in_as_user(page, "Admin")
     page.get_by_role("link", name="Start").click()
 
+
 def test_basic_triage(page: Page) -> None:
     """
     This test completes a basic triage as a 111 call handler
